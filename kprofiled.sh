@@ -102,18 +102,22 @@ while getopts b: option
 do
 	case "$option" in
 		b)
-			if [ $OPTARG = "ab" || $OPTARG = "kbuild"]
-				BENCHMARK_TYPE=$OPTARG
-				echo "$BENCHMARKで負荷をかけます"
+			if [ $OPTARG = "ab" -o $OPTARG = "kbuild" ]
 			then
+				BENCHMARK_TYPE=$OPTARG
+				echo "$BENCHMARK_TYPEで負荷をかけます"
 			else
 				#引数が不正だったらエラーで終了
 				echo "kprofiled.sh 引数指定が不正です"
 				echo "Usage: #kprofiled -b [ab|kbuild]"
 				exit 1
 			fi
-		esac
+		;;
+	esac
 done
+
+
+echo "DEBUG:$BENCHMARK_TYPE"
 
 #データが格納されるディレクトリを作成
 if [ ! -d "$DATA_DIR" ]
@@ -152,5 +156,6 @@ modprobe msr
 #    kprofiled_main "$i"
 #done
 
+kprofiled_main 16
 kprofiled_main 20
 
